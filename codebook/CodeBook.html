@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+	<style>
+body {background-color: powderblue;}
+h1   {color: blue;}
+p    {color: red;}
+.Code{min-height:30px; width:60%; margin:auto;
+       border-radius: 5px; border: medium solid orange;
+		 background-color: lightgrey; padding:5px;}
+	</style>
+
+<head>
+	<meta charset="UTF-8">
+	<script src="/PagesJL.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.12/d3.js"></script>
+</head>
+			<body>
+				<p class="Code" contenteditable="true" >a = 1 + 2;</p>
+				<button id="Button1" onclick="runCode()" type="button">Run Code</button>
+			</body>
+<script>
+function runCode(){
+	el = document.getElementsByClassName("Code")[0]
+	text = el.innerText
+	Pages.callback('out', text)
+}
+</script>
+</html>
