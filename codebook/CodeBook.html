@@ -1,28 +1,77 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 	<style>
-body {background-color: powderblue;}
-h1   {color: blue;}
-p    {color: red;}
-.Code{min-height:30px; width:60%; margin:auto;
-       border-radius: 5px; border: medium solid orange;
-		 background-color: lightgrey; padding:5px;}
-	</style>
+body {background-color: #24262b;}
+
+.Block{width:60%; margin:auto;
+	border-radius: 5px; border: medium solid #5584d8; margin-bottom: 10px;}
+.Code{min-height:30px;
+		 background-color: #161719; padding:5px;
+ }
+.ln{ font-family:Consolas,Monaco,Lucida Console,Liberation Mono,
+	DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New;
+	color:lightgrey; margin-left: 10px;}
+.head{ background-color: #b8c6ff; padding: 3px; display: none;}
+</style>
 
 <head>
 	<meta charset="UTF-8">
 	<script src="/PagesJL.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.12/d3.js"></script>
 </head>
-			<body>
-				<p class="Code" contenteditable="true" >a = 1 + 2;</p>
-				<button id="Button1" onclick="runCode()" type="button">Run Code</button>
-			</body>
+<body>
+					<button id="Button" onclick="runCode()" type="button">Run</button>
+					<button id="Kill" onclick="" type="button">Kill</button>
+					<button id="New" onclick="" type="button">New Block</button>
+
+					<div class="Block">
+						<div class="head">Example Block: </div>
+					<div class="Code" contenteditable="true" >
+						<div class="ln">using Winston</div>
+						<div class="ln"></div>
+						<div class="ln">curve = [1/x for x in 1:100]</div>
+						<div class="ln">plot(curve)</div>
+					</div>
+					</div>
+</body>
 <script>
 function runCode(){
-	el = document.getElementsByClassName("Code")[0]
+	//el = document.getElementsByClassName("Code")[0]
+	selectedBlock.getElementsByClassName("Code")[0]
 	text = el.innerText
 	Pages.callback('out', text)
 }
+
+var selectedBlock;
+window.onload = function(){
+	body = document.body
+	document.addEventListener("click", function(e){ Identify(e) },false);
+	selectedBlock = document.getElementsByClassName('Block')[0];
+
+};
+function getClass(el, name){
+//console.log(el.parentElement == null)
+	if( el.classList.contains(name) ){   return el;}
+	else if(el.parentElement == null){  return  }
+	else if(el.parentElement.classList.contains(name) ){ return el.parrentnode; }
+	else if(el.parentElement.parentElement == null){  return  }
+	else if(el.parentElement.parentElement.classList.contains(name) ){
+		return el.parentElement.parentElement;
+	}
+}
+
+function Identify(e){
+	elem = e.target
+		el = getClass(elem, "Block")
+		if( el !== undefined){
+			console.log(el) // this
+			selectedBlock = el //.parentnode
+			head = selectedBlock.getElementsByClassName('head')[0];
+			head.style.display = "block";
+		}
+
+}
+
+
 </script>
 </html>
