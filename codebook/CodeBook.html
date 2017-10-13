@@ -7,11 +7,14 @@ body {background-color: #24262b;}
 	border-radius: 5px; border: medium solid #5584d8; margin-bottom: 10px;}
 .Code{min-height:30px;
 		 background-color: #161719; padding:5px;
- } 
+ }
 .ln{ font-family:Consolas,Monaco,Lucida Console,Liberation Mono,
 	DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New;
 	color:lightgrey; margin-left: 10px;}
-.head{ background-color: #b8c6ff; padding: 3px; display: none;}
+.head{ background-color: #b8c6ff; padding: 3px; display: none; border-radius: 3px 3px 0px 0px;}
+.output{ padding: 3px; border-top: thin solid #964c8c; background-color: #181819;
+		 color: lightgrey;
+}
 </style>
 
 <head>
@@ -22,7 +25,7 @@ body {background-color: #24262b;}
 <body>
 					<button id="Button" onclick="runCode()" type="button">Run</button>
 					<button id="Kill" onclick="" type="button">Kill</button>
-					<button id="New" onclick="" type="button">New Block</button>
+					<button id="New" onclick="insetBlock()" type="button">New Block</button>
 
 					<div class="Block">
 						<div class="head">Example Block: </div>
@@ -32,16 +35,30 @@ body {background-color: #24262b;}
 						<div class="ln">curve = [1/x for x in 1:100]</div>
 						<div class="ln">plot(curve)</div>
 					</div>
+					<div class="output">julia> ...</div>
 					</div>
 </body>
 <script>
+function insertAfter(newNode, referenceNode) {
+	console.log(referenceNode)
+    referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+}
+//==============================================================================
 function runCode(){
 	//el = document.getElementsByClassName("Code")[0]
 	selectedBlock.getElementsByClassName("Code")[0]
 	text = el.innerText
 	Pages.callback('out', text)
 }
-
+//==============================================================================
+function insetBlock(){
+	var div = document.createElement("div");
+	div.className = 'Block';
+	div.append()
+	div.innerHTML = '<div class="head">:)</div><div class="Code" contenteditable="true" ><div class="ln">1 + 1</div><div class="ln"></div><div class="output">julia> ...</div></div>';
+	insertAfter(div, selectedBlock)
+}
+//==============================================================================
 var selectedBlock;
 window.onload = function(){
 	body = document.body
@@ -49,6 +66,7 @@ window.onload = function(){
 	selectedBlock = document.getElementsByClassName('Block')[0];
 
 };
+//==============================================================================
 function getClass(el, name){
 //console.log(el.parentElement == null)
 	if( el.classList.contains(name) ){   return el;}
@@ -59,19 +77,26 @@ function getClass(el, name){
 		return el.parentElement.parentElement;
 	}
 }
-// poop stinks!
+
 function Identify(e){
 	elem = e.target
 		el = getClass(elem, "Block")
 		if( el !== undefined){
-			console.log(el) // this
 			selectedBlock = el //.parentnode
-			head = selectedBlock.getElementsByClassName('head')[0];
-			head.style.display = "block";
-		}
+			selectNew('head')
+			selectNew('output')
+			}
 
 }
 
-
+//==============================================================================
+function selectNew(name){
+	var all = document.getElementsByClassName(name)
+	for (var i = 0; i < all.length; i++) {
+		all[i].style.display = "none";
+	}
+	el = selectedBlock.getElementsByClassName(name)[0];
+	el.style.display = "block";
+}
 </script>
 </html>
