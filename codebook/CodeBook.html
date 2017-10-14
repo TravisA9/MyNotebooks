@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 	<style>
-body {background-color: #24262b;}
+body {background-color: #14262b;}
 
 .Block{width:60%; margin:auto;
 	border-radius: 5px; border: medium solid #5584d8; margin-bottom: 10px;}
 .Code{min-height:30px;
-		 background-color: #161719; padding:5px;
+		 background-color: #101719; padding:5px;
  }
 .ln{ font-family:Consolas,Monaco,Lucida Console,Liberation Mono,
 	DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New;
@@ -44,7 +44,7 @@ function insertAfter(newNode, referenceNode) {
     referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
 }
 //==============================================================================
-function runCode(){
+function runCode(hello){
 	//el = document.getElementsByClassName("Code")[0]
 	selectedBlock.getElementsByClassName("Code")[0]
 	text = el.innerText
