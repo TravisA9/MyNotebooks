@@ -10,7 +10,10 @@ Pages.start()
 
 function printout()
     output = readPipe(shell.out)
-    println("julia> ", output)
+    if output !== nothing
+        println("julia> ", output)
+        Pages.broadcast("script","""output($(output),"false");""")
+    end
 end
 
 Callback("out") do client, args
@@ -21,15 +24,20 @@ Callback("out") do client, args
         Timer( fn -> printout(), 1, 0)
     else
         println("julia> ", output)
+        Pages.broadcast("script","""output($(output),"false");""")
     end
-end
 
+end
 
 Endpoint("/CodeBook") do request::Request
     readstring(joinpath(dirname(@__FILE__),"CodeBook.html"))
 end
-
-
+Endpoint("/test.js") do request::Request
+    readstring(joinpath(dirname(@__FILE__),"test.js"))
+end
+Endpoint("/font-awesome/css/font-awesome.css") do request::Request
+    readstring(joinpath(dirname(@__FILE__),"font-awesome/css/font-awesome.css"))
+end
 
 
 #    SendButton()
