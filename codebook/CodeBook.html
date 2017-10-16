@@ -1,25 +1,40 @@
+
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 	<style>
-body {background-color: #24262b;}
-
-.Block{width:60%; margin:auto;
-	border-radius: 5px; border: medium solid #5584d8; margin-bottom: 10px;}
+body {background-color: #7e869a;}
+/* #7ac9ed #07a*/
+.Block{
+	border-radius: 5px; border: medium solid #2b3d5d; margin-bottom: 10px;}
 .Code{min-height:30px;
 		 background-color: #161719; padding:5px;
+		 font-family:Consolas,Monaco,Lucida Console,Liberation Mono,
+		 	DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New;
  }
-.ln{ font-family:Consolas,Monaco,Lucida Console,Liberation Mono,
-	DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New;
-	color:lightgrey; margin-left: 10px;}
-.head{ background-color: #b8c6ff; padding: 3px; display: none; border-radius: 3px 3px 0px 0px;}
+.ln{ color:lightgrey; margin-left: 10px;}
+.head{ background-color: #2b3d5d; padding: 3px; display: none; border-radius: 3px 3px 0px 0px;}
 .output{ padding: 3px; border-top: thin solid #964c8c; background-color: #181819;
 		 color: lightgrey;
 }
+.section{color:lightgrey; padding:5px;width:60%; margin:auto; font-size: 1.2em;
+		margin-top: 15px; border-radius: 5px; /*border: thin solid #964c8c;*/
+		-webkit-box-shadow: 0px 0px 8px 0px rgba(99,97,99,0.9);
+	  -moz-box-shadow: 0px 0px 8px 0px rgba(99,97,99,0.9);
+	   box-shadow: 0px 0px 8px 0px rgba(99,97,99,0.9);
+		 background-color: #24262b;
+}
+.totorial{ padding:10px;
+	font-family:"jaf-bernino-sans","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Geneva,Verdana,sans-serif;}
+i{padding:3px 5px 3px 5px; border-radius: 5px; color:#b7d1dc;}
+i:hover{background:grey;}
 </style>
 
 <head>
 	<meta charset="UTF-8">
 	<script src="/PagesJL.js"></script>
+	<script src="/test.js"></script>
+	<!-link rel="stylesheet" type="text/css"  href="/font-awesome/css/font-awesome.css"->
+	<link rel="stylesheet" type="text/css"  href="http:////fontawesome.io/assets/font-awesome/css/font-awesome.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.12/d3.js"></script>
 </head>
 <body>
@@ -27,8 +42,19 @@ body {background-color: #24262b;}
 					<button id="Kill" onclick="" type="button">Kill</button>
 					<button id="New" onclick="insetBlock()" type="button">New Block</button>
 
+<div class="section">
+					<div class="totorial" contenteditable="true">
+						<p>First, we need to get plotting ability so we put in
+							```using Winston```. Winston has pretty decent plotting functionality.</p>
+						<p>Then we want to make 100 points which will make up the curve we want to draw.
+						Our curve will range from zero to one. We just take 1 and divide it by every
+						number from 1 to 100.</p>
+						<p>Now plotting it is easy. The array of values are treated as the y value in the graph.</p>
+					</div>
+
 					<div class="Block">
-						<div class="head">Example Block: </div>
+						<div class="head"><i class="fa fa-play"></i> <i class="fa fa-clock-o"></i>
+							<i class="fa fa-times" style="float:right;"></i></div>
 					<div class="Code" contenteditable="true" >
 						<div class="ln">using Winston</div>
 						<div class="ln"></div>
@@ -37,6 +63,8 @@ body {background-color: #24262b;}
 					</div>
 					<div class="output">julia> ...</div>
 					</div>
+</div>
+
 </body>
 <script>
 function insertAfter(newNode, referenceNode) {
@@ -46,17 +74,37 @@ function insertAfter(newNode, referenceNode) {
 //==============================================================================
 function runCode(){
 	//el = document.getElementsByClassName("Code")[0]
-	selectedBlock.getElementsByClassName("Code")[0]
+	el = selectedBlock.getElementsByClassName("Code")[0]
 	text = el.innerText
 	Pages.callback('out', text)
 }
 //==============================================================================
 function insetBlock(){
 	var div = document.createElement("div");
-	div.className = 'Block';
+	div.className = 'section';
 	div.append()
-	div.innerHTML = '<div class="head">:)</div><div class="Code" contenteditable="true" ><div class="ln">1 + 1</div><div class="ln"></div><div class="output">julia> ...</div></div>';
-	insertAfter(div, selectedBlock)
+	div.innerHTML =
+						'<div class="totorial" contenteditable="true">Explain your code here!</div>' +
+						'<div class="Block">' +
+								'<div class="head">' +
+										'<i class="fa fa-play"></i><i class="fa fa-clock-o"></i>  <i class="fa fa-times" style="float:right;"></i>' +
+								'</div>' +
+								'<div class="Code" contenteditable="true" >' +
+										'<div class="ln">a = 1 + 2</div><div class="ln"></div>' +
+								'</div>' +
+								'<div class="output">julia> ...</div>' +
+						'</div>';
+	//'<div class="head"><i class="fa fa-play"></i> <i class="fa fa-clock-o"></i><i class="fa fa-times" style="float:right;"></i></div><div class="Code" contenteditable="true" ><div class="ln">1 + 1</div><div class="ln"></div><div class="output">julia> ...</div></div>';
+	insertAfter(div, selectedSect)
+}
+//==============================================================================
+function output(output,append){
+	shell = selectedBlock.getElementsByClassName("output")[0];
+	if(append=="true"){
+		shell.appendChild(output);
+	}else{
+		shell.innerHTML = output;
+	}
 }
 //==============================================================================
 var selectedBlock;
@@ -64,20 +112,17 @@ window.onload = function(){
 	body = document.body
 	document.addEventListener("click", function(e){ Identify(e) },false);
 	selectedBlock = document.getElementsByClassName('Block')[0];
+	selectedSect = document.getElementsByClassName('section')[0];
 
 };
 //==============================================================================
 function getClass(el, name){
-//console.log(el.parentElement == null)
-	if( el.classList.contains(name) ){   return el;}
-	else if(el.parentElement == null){  return  }
-	else if(el.parentElement.classList.contains(name) ){ return el.parrentnode; }
-	else if(el.parentElement.parentElement == null){  return  }
-	else if(el.parentElement.parentElement.classList.contains(name) ){
-		return el.parentElement.parentElement;
-	}
+		while (el !== null) {
+			if(el.classList.contains(name) ){ return el; }
+			el = el.parentElement;
+		}
 }
-
+//==============================================================================
 function Identify(e){
 	elem = e.target
 		el = getClass(elem, "Block")
@@ -85,8 +130,14 @@ function Identify(e){
 			selectedBlock = el //.parentnode
 			selectNew('head')
 			selectNew('output')
-			}
-
+		}
+		el = getClass(elem, "section")
+		if( el !== undefined){
+				selectedSect = el //.parentnode
+				console.log(selectedSect)
+				selectNew('head')
+				selectNew('output')
+		}
 }
 
 //==============================================================================
